@@ -7,6 +7,6 @@ namespace EdmundsApiSDK
 {
 	public interface IEdmunds
 	{
-		Task<IEnumerable<Make>> GetAllMakes();
+		Task<IEnumerable<Make>> GetMakes(string year = null);
 	}
 }

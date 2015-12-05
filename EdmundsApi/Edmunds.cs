@@ -3,30 +3,58 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace EdmundsApiSDK
 {
 	public class Edmunds : IEdmunds
 	{
 		private string _apiKey;
+		private string _apiRoot;
+		private HttpClient _client;
 
 		public Edmunds(string apiKey)
 		{
 			_apiKey = apiKey;
+			_apiRoot = "api/vehicle/v2/";
+
+			_client = new HttpClient();
+			_client.BaseAddress = new Uri( "http://api.edmunds.com/" );
+			_client.DefaultRequestHeaders.Accept.Add( new MediaTypeWithQualityHeaderValue( "application/json" ) );
 		}
 
-		public async Task<IEnumerable<Make>> GetAllMakes()
+		public async Task<IEnumerable<Make>> GetMakes(string year = null)
 		{
-			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri( "http://api.edmunds.com/" );
-			client.DefaultRequestHeaders.Accept.Add( new MediaTypeWithQualityHeaderValue( "application/json" ) );
+			IDictionary<string, string> parameters = null;
+			if (year != null)
+			{
+				parameters = new Dictionary<string, string>();
+				parameters.Add( "year", year );
+			}
 
-			HttpResponseMessage response = await client.GetAsync( "api/vehicle/v2/makes?api_key=" + _apiKey );
+			HttpResponseMessage response = await _client.GetAsync( GenerateURLForResource("makes", parameters) );
 			response.EnsureSuccessStatusCode();
 
-			var something = JsonConvert.DeserializeObject<CarMakesDTO>( await response.Content.ReadAsStringAsync() );
-			return something.Makes;
+			var responseBody = JsonConvert.DeserializeObject<CarMakesDTO>( await response.Content.ReadAsStringAsync() );
+			return responseBody.Makes;
+		}
+
+		private string GenerateURLForResource(string resource, IDictionary<string, string> options = null)
+		{
+			StringBuilder url = new StringBuilder();
+			url.Append( _apiRoot );
+			url.Append( "?" );
+			url.Append( "api_key=" + _apiKey );
+			
+			if (options != null)
+			{
+				url.Append( "&" );
+				url.Append( string.Join( "&", options.Select( entry => entry.Key + "=" + entry.Value ).ToArray() ) );
+			}
+
+			return url.ToString();
 		}
 	}
 }

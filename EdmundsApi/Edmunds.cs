@@ -45,6 +45,7 @@ namespace EdmundsApiSDK
 		{
 			StringBuilder url = new StringBuilder();
 			url.Append( _apiRoot );
+			url.Append( resource );
 			url.Append( "?" );
 			url.Append( "api_key=" + _apiKey );
 			

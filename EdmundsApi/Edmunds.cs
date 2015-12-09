@@ -37,8 +37,8 @@ namespace EdmundsApiSDK
 			HttpResponseMessage response = await _client.GetAsync( GenerateURLForResource("makes", parameters) );
 			response.EnsureSuccessStatusCode();
 
-			var responseBody = JsonConvert.DeserializeObject<CarDataDTO<Make>>( await response.Content.ReadAsStringAsync() );
-			return responseBody.Data;
+			var responseBody = JsonConvert.DeserializeObject<CarMakeDTO>( await response.Content.ReadAsStringAsync() );
+			return responseBody.Makes;
 		}
 
 		public async Task<IEnumerable<Model>> GetModelsByMake(string makeNiceName, string year = null)
@@ -55,8 +55,8 @@ namespace EdmundsApiSDK
 			HttpResponseMessage response = await _client.GetAsync( GenerateURLForResource( makeNiceName + "/models", parameters ) );
 			response.EnsureSuccessStatusCode();
 
-			var responseBody = JsonConvert.DeserializeObject<CarDataDTO<Model>>( await response.Content.ReadAsStringAsync() );
-			return responseBody.Data;
+			var responseBody = JsonConvert.DeserializeObject<CarModelDTO>( await response.Content.ReadAsStringAsync() );
+			return responseBody.Models;
 		}
 
 		private string GenerateURLForResource(string resource, IDictionary<string, string> options = null)

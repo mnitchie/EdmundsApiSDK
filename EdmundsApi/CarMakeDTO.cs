@@ -2,9 +2,9 @@
 
 namespace EdmundsApiSDK
 {
-	public class CarDataDTO<T>
+	public class CarMakeDTO
 	{
-		public IEnumerable<T> Data { get; set; }
+		public IEnumerable<Make> Makes { get; set; }
 		public int Count { get; set; }
 	}
 }

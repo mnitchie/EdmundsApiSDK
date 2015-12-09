@@ -44,7 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EdmundsApi\CarDataDTO.cs" />
+    <Compile Include="EdmundsApi\CarMakeDTO.cs" />
+    <Compile Include="EdmundsApi\CarModelDTO.cs" />
     <Compile Include="EdmundsApi\CarYear.cs" />
     <Compile Include="EdmundsApi\Edmunds.cs" />
     <Compile Include="EdmundsApi\IEdmunds.cs" />

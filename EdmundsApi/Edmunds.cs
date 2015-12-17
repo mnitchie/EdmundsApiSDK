@@ -41,6 +41,19 @@ namespace EdmundsApiSDK
 			return responseBody.Makes;
 		}
 
+		public async Task<Make> GetMakeByNiceName(string niceName)
+		{
+			if (niceName == null)
+			{
+				throw new ArgumentNullException( "niceName is required" );
+			}
+
+			HttpResponseMessage response = await _client.GetAsync( GenerateURLForResource( niceName ) );
+			response.EnsureSuccessStatusCode();
+
+			return JsonConvert.DeserializeObject<Make>( await response.Content.ReadAsStringAsync() );
+		}
+
 		public async Task<IEnumerable<Model>> GetModelsByMake(string makeNiceName, string year = null)
 		{
 			IDictionary<string, string> parameters = null;
